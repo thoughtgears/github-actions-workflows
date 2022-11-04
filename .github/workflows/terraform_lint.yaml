@@ -16,7 +16,7 @@ jobs:
 
       - name: 'Marking related changes'
         id: changes
-        uses: dorny/paths-filter@v2.10.2
+        uses: dorny/paths-filter@v2.11.1
         with:
           initial-fetch-depth: '1'
           filters: |
