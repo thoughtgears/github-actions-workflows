@@ -11,19 +11,22 @@ on:
 
 jobs:
   go-tests:
-    name: Run Go Unit Tests
+    name: terratest
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-go@v3
-        with:
-          go-version: ${{inputs.go_version}}
       - uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: ${{inputs.terraform_version}}
+
+      - uses: actions/setup-go@v3
+        with:
+          go-version: ${{inputs.go_version}}
+
       - name: Download Go Modules
         working-directory: test
         run: go mod tidy
+
       - name: Run Go Tests
         working-directory: test
         run: go test -v
