@@ -1,19 +1,26 @@
 name: Terraform tests
 on:
   workflow_call:
+    inputs:
+      terraform_version:
+        required: true
+        type: string
+      go_version:
+        required: true
+        type: string
 
 jobs:
   go-tests:
     name: Run Go Unit Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-go@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
         with:
-          go-version: 1.13
-      - uses: autero1/action-terraform@v0.1.0
+          go-version: ${{inputs.go_version}}
+      - uses: hashicorp/setup-terraform@v2
         with:
-          terraform_version: 1.3.1
+          terraform_version: ${{inputs.terraform_version}}
       - name: Download Go Modules
         working-directory: test
         run: go mod tidy
