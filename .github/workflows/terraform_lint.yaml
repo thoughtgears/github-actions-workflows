@@ -1,0 +1,37 @@
+name: Terraform lints
+on:
+  workflow_call:
+    inputs:
+      terraform_version:
+        required: true
+        type: string
+
+jobs:
+  terraform_linter:
+    name: 'Terraform'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: 'Marking related changes'
+        id: changes
+        uses: dorny/paths-filter@v2.10.2
+        with:
+          initial-fetch-depth: '1'
+          filters: |
+            terraform:
+              - '**.tf'
+              - '**.tfvars'
+
+      - name: 'Setup Terraform'
+        if: steps.changes.outputs.terraform == 'true'
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{inputs.terraform_version}}
+
+      - name: 'Lint Terraform'
+        if: steps.changes.outputs.terraform == 'true'
+        run: terraform fmt -write=false -list=true -check -diff -recursive ./
+      - run: echo "Only validate the entire workflow when no changes detected"
+        if: steps.changes.outputs.terraform == 'false'
