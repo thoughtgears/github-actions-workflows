@@ -4,8 +4,8 @@ A collection of reusable workflows for github actions that include workflows for
 It includes wokflows for:
 
 * terraform
-* * documentation
-* * linting
-* * terratest
+  * documentation
+  * linting
+  * terratest
 
 
